@@ -1,7 +1,9 @@
 <template>
-  <div>我是根组件</div>
+  <router-view></router-view>
 </template>
 
-<style lang="less">
+<script>
+export default {};
+</script>
 
-</style>
+<style lang="less" scoped></style>

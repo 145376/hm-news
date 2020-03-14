@@ -1,13 +1,19 @@
 <template>
   <div class="hm-button">
-    <div class="btn">
+    <div class="btn" @click="login">
       <slot></slot>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  methods: {
+    login() {
+      this.$emit('login');
+    }
+  }
+};
 </script>
 
 <style lang="less" scoped>

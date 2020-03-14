@@ -2,29 +2,51 @@
   <div class="login">
     <hm-header>登录</hm-header>
     <hm-logo></hm-logo>
-    <div class="form-group">
-      <input type="username" placeholder="手机号/用户名" />
-    </div>
-    <div class="form-group">
-      <input type="password" placeholder="请输入密码" />
-    </div>
-    <hm-button>登录</hm-button>
+    <hm-input
+      type="text"
+      placeholder="用户名/手机号"
+      v-model="username"
+      :rules="/^1\d{4,10}$/"
+      msg="格式错误"
+    ></hm-input>
+    <hm-input
+      type="password"
+      placeholder="密码"
+      v-model="password"
+      :rules="/^\d{3,}$/"
+      msg="格式错误"
+    ></hm-input>
+    <hm-button @login="login">登录</hm-button>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      username: '',
+      password: ''
+    };
+  },
+  methods: {
+    login() {
+      this.$axios({
+        url: '/login',
+        method: 'post',
+        data: {
+          username: this.username,
+          password: this.password
+        }
+      }).then(res => {
+        if (res.data.statusCode === 200) {
+          this.$router.push('/user');
+        } else {
+          alert(res.data.message);
+        }
+      });
+    }
+  }
+};
 </script>
 
-<style lang="less" scoped>
-input[type="username"],
-input[type="password"] {
-  width: 90%;
-  height: 40px;
-  border: none;
-  border-bottom: 1px solid #ccc;
-  margin: 0 20px;
-  font-size: 16px;
-  margin-bottom: 15px;
-}
-</style>
+<style lang="less" scoped></style>

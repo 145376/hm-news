@@ -14,10 +14,12 @@ import HmHeader from './components/HmHeader.vue';
 import HmLogo from './components/HmLogo.vue';
 import HmButton from './components/HmButton.vue';
 import HmInput from './components/HmInput.vue';
+import HmNavbar from './components/HmNavbar.vue';
 Vue.component('hm-header', HmHeader);
 Vue.component('hm-logo', HmLogo);
 Vue.component('hm-button', HmButton);
 Vue.component('hm-input', HmInput);
+Vue.component('hm-navbar', HmNavbar);
 
 Vue.config.productionTip = false;
 

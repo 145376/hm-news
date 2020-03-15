@@ -8,6 +8,7 @@
       v-model="username"
       :rules="/^1\d{4,10}$/"
       msg="格式错误"
+      ref="username"
     ></hm-input>
     <hm-input
       type="password"
@@ -15,8 +16,12 @@
       v-model="password"
       :rules="/^\d{3,}$/"
       msg="格式错误"
+      ref="password"
     ></hm-input>
     <hm-button @login="login">登录</hm-button>
+    <div class="go-register">
+      还没账号?去<router-link to="/register">注册</router-link>
+    </div>
   </div>
 </template>
 
@@ -30,6 +35,10 @@ export default {
   },
   methods: {
     login() {
+      let res1 = this.$refs.username.checkout(this.username);
+      let res2 = this.$refs.password.checkout(this.password);
+      console.log(res1, res2);
+      if (!res1 || !res2) return;
       this.$axios({
         url: '/login',
         method: 'post',
@@ -38,10 +47,12 @@ export default {
           password: this.password
         }
       }).then(res => {
+        console.log(res);
         if (res.data.statusCode === 200) {
+          this.$toast.success(res.data.message);
           this.$router.push('/user');
         } else {
-          alert(res.data.message);
+          this.$toast.fail(res.data.message);
         }
       });
     }
@@ -49,4 +60,10 @@ export default {
 };
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.go-register {
+  font-size: 14px;
+  text-align: right;
+  padding-right: 20px;
+}
+</style>

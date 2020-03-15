@@ -4,9 +4,9 @@
       :type="type"
       :placeholder="placeholder"
       @input="send"
-      :class="{success: status === 'success', error: status === 'error'}"
+      :class="{ success: status === 'success', error: status === 'error' }"
     />
-    <div class="tips" v-show="status === 'error'">{{msg}}</div>
+    <div class="tips" v-show="status === 'error'">{{ msg }}</div>
   </div>
 </template>
 
@@ -32,12 +32,17 @@ export default {
     send(e) {
       let value = e.target.value;
       this.$emit('input', value);
+      this.checkout(value);
+    },
+    checkout(value) {
       //表单校验
       if (this.rules) {
         if (this.rules.test(value)) {
           this.status = 'success';
+          return true;
         } else {
           this.status = 'error';
+          return false;
         }
       }
     }

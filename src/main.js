@@ -2,6 +2,7 @@ import Vue from 'vue';
 import App from './App.vue';
 import 'lib-flexible';
 import axios from 'axios';
+import { Toast } from 'vant';
 //引入样式
 import './style/base.less';
 //引入字体图标
@@ -22,6 +23,8 @@ Vue.config.productionTip = false;
 
 axios.defaults.baseURL = 'http://localhost:3000';
 Vue.prototype.$axios = axios;
+
+Vue.use(Toast);
 
 let vm = new Vue({
   router,

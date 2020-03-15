@@ -1,6 +1,6 @@
 <template>
   <div class="hm-button">
-    <div class="btn" @click="login">
+    <div class="btn" @click="click">
       <slot></slot>
     </div>
   </div>
@@ -9,8 +9,8 @@
 <script>
 export default {
   methods: {
-    login() {
-      this.$emit('login');
+    click() {
+      this.$emit('clickFn');
     }
   }
 };

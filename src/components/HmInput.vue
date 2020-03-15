@@ -3,6 +3,7 @@
     <input
       :type="type"
       :placeholder="placeholder"
+      :value="value"
       @input="send"
       :class="{ success: status === 'success', error: status === 'error' }"
     />

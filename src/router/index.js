@@ -8,7 +8,7 @@ Vue.use(VueRouter);
 export default new VueRouter({
   routes: [
     { path: '/', redirect: '/login' },
-    { path: '/login', component: Login },
+    { name: 'login', path: '/login', component: Login },
     { path: '/register', component: Register },
     { path: '/user', component: User }
   ]

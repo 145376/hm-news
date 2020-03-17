@@ -2,7 +2,7 @@ import Vue from 'vue';
 import App from './App.vue';
 import 'lib-flexible';
 import axios from 'axios';
-import { Toast } from 'vant';
+import moment from 'moment';
 //引入样式
 import './style/base.less';
 //引入字体图标
@@ -21,12 +21,31 @@ Vue.component('hm-button', HmButton);
 Vue.component('hm-input', HmInput);
 Vue.component('hm-navbar', HmNavbar);
 
+//引入vant-ui组件
+import { Toast } from 'vant';
+import { Dialog } from 'vant';
+
 Vue.config.productionTip = false;
 
 axios.defaults.baseURL = 'http://localhost:3000';
 Vue.prototype.$axios = axios;
+//响应拦截器
+axios.interceptors.response.use(res => {
+  // console.log(res);
+  if (res.data.statusCode === 401 && res.data.message === '用户信息验证失败') {
+    router.push('/login');
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+  }
+  return res;
+});
 
 Vue.use(Toast);
+Vue.use(Dialog);
+
+Vue.filter('date', input => {
+  return moment().format('YYYY-MM-DD');
+});
 
 let vm = new Vue({
   router,

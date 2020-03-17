@@ -47,18 +47,22 @@ export default {
           password: this.password
         }
       }).then(res => {
-        // console.log(res);
-        if (res.data.statusCode === 200) {
-          this.$toast.success(res.data.message);
+        console.log(res);
+        const { statusCode, message, data } = res.data;
+        if (statusCode === 200) {
+          let userId = data.user.id;
+          let token = data.token;
+          localStorage.setItem('userId', userId);
+          localStorage.setItem('token', token);
+          this.$toast.success(message);
           this.$router.push('/user');
         } else {
-          this.$toast.fail(res.data.message);
+          this.$toast.fail(message);
         }
       });
     }
   },
   created() {
-    console.log(this.$route);
     this.username = this.$route.params.username;
     this.password = this.$route.params.password;
   }

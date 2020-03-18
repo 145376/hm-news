@@ -47,7 +47,7 @@ export default {
           password: this.password
         }
       }).then(res => {
-        console.log(res);
+        // console.log(res);
         const { statusCode, message, data } = res.data;
         if (statusCode === 200) {
           let userId = data.user.id;

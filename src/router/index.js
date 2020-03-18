@@ -16,6 +16,7 @@ let router = new VueRouter({
   ]
 });
 //路由守卫
+let permit = ['/user', '/edit'];
 router.beforeEach((to, from, next) => {
   // console.log(to);
   // console.log(from);
@@ -29,7 +30,7 @@ router.beforeEach((to, from, next) => {
   // } else {
   //   next();
   // }
-  if (to.path !== '/login' && !token) {
+  if (permit.includes(to.path) && !token) {
     next('/login');
   } else {
     next();

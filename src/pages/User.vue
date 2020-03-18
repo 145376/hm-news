@@ -38,10 +38,10 @@ export default {
     // console.log(id, token);
     this.$axios({
       url: `/user/${id}`,
-      method: 'get',
-      headers: {
-        Authorization: token
-      }
+      method: 'get'
+      // headers: {
+      //   Authorization: token
+      // }
     }).then(res => {
       // console.log(res);
       const { statusCode, message, data } = res.data;

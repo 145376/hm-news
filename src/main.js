@@ -24,11 +24,30 @@ Vue.component('hm-navbar', HmNavbar);
 //引入vant-ui组件
 import { Toast } from 'vant';
 import { Dialog } from 'vant';
+import { Field } from 'vant';
+import { RadioGroup, Radio } from 'vant';
+import { Cell, CellGroup } from 'vant';
+import { Uploader } from 'vant';
+Vue.use(Toast);
+Vue.use(Dialog);
+Vue.use(Field);
+Vue.use(Radio);
+Vue.use(RadioGroup);
+Vue.use(Cell);
+Vue.use(CellGroup);
+Vue.use(Uploader);
 
 Vue.config.productionTip = false;
 
 axios.defaults.baseURL = 'http://localhost:3000';
 Vue.prototype.$axios = axios;
+//请求拦截器
+axios.interceptors.request.use(config => {
+  // console.log(config);
+  let token = localStorage.getItem('token');
+  config.headers.Authorization = token;
+  return config;
+});
 //响应拦截器
 axios.interceptors.response.use(res => {
   // console.log(res);
@@ -39,9 +58,6 @@ axios.interceptors.response.use(res => {
   }
   return res;
 });
-
-Vue.use(Toast);
-Vue.use(Dialog);
 
 Vue.filter('date', input => {
   return moment().format('YYYY-MM-DD');

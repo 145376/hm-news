@@ -53,10 +53,27 @@
     </van-dialog>
     <!-- 修改头像 -->
     <van-uploader :after-read="afterRead" />
+    <!-- 头像裁剪 -->
+    <div class="mask" v-show="showMask">
+      <vueCropper
+        :img="img"
+        outputType="jepg"
+        autoCrop
+        autoCropWidth="150"
+        autoCropHeight="150"
+        :info="false"
+        ref="cropper"
+      ></vueCropper>
+      <van-button type="primary" class="crop" @click="afterRead"
+        >确定</van-button
+      >
+      <van-button type="info" class="cancel" @click="cancel">取消</van-button>
+    </div>
   </div>
 </template>
 
 <script>
+import { VueCropper } from 'vue-cropper';
 export default {
   created() {
     this.getInfo();
@@ -72,7 +89,7 @@ export default {
         let { statusCode, data } = res.data;
         if (statusCode === 200) {
           this.info = data;
-          console.log(this.info);
+          // console.log(this.info);
         }
       });
     },
@@ -118,22 +135,42 @@ export default {
       });
     },
     afterRead(file) {
-      // console.log(file.file);
-      let fd = new FormData();
-      fd.append('file', file.file);
-      this.$axios({
-        url: '/upload',
-        method: 'post',
-        data: fd
-      }).then(res => {
-        // console.log(res);
-        let { statusCode, data } = res.data;
-        if (statusCode === 200) {
-          this.axiosEdit({
-            head_img: data.url
-          });
-        }
+      // console.log(file);
+      this.showMask = true;
+      this.img = file.content;
+      this.$refs.cropper.getCropBlob(data => {
+        // console.log(data);
+        let fd = new FormData();
+        fd.append('file', data);
+        this.$axios({
+          url: '/upload',
+          method: 'post',
+          data: fd
+        }).then(res => {
+          // console.log(res);
+          let { statusCode, data } = res.data;
+          if (statusCode === 200) {
+            this.axiosEdit({
+              head_img: data.url
+            });
+            this.showMask = false;
+            this.img = '';
+          }
+        });
       });
+    },
+    // beforeRead(file) {
+    //   // console.log('beforeRead', file);
+    //   if (file.type === 'image/jpeg') {
+    //     return true;
+    //   } else {
+    //     this.$toast.fail('必须上传.jpg格式的照片');
+    //     return false;
+    //   }
+    // },
+    cancel() {
+      this.showMask = false;
+      this.img = '';
     }
   },
   data() {
@@ -144,8 +181,13 @@ export default {
       showPws: false,
       pws: '********',
       showGender: false,
-      gender: 1
+      gender: 1,
+      showMask: false,
+      img: ''
     };
+  },
+  components: {
+    VueCropper
   }
 };
 </script>
@@ -176,6 +218,24 @@ export default {
     left: 50%;
     transform: translateX(-50%);
     opacity: 0;
+  }
+  .mask {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    .crop,
+    .cancel {
+      position: absolute;
+      top: 0;
+    }
+    .crop {
+      right: 0;
+    }
+    .cancel {
+      left: 0;
+    }
   }
 }
 </style>

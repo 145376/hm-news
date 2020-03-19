@@ -22,8 +22,16 @@
         <span class="iconfont iconjiantou1"></span>
       </div>
     </div>
-    <hm-navbar title="我的关注" content="关注的用户"></hm-navbar>
-    <hm-navbar title="我的跟贴" content="跟帖回复"></hm-navbar>
+    <hm-navbar
+      title="我的关注"
+      content="关注的用户"
+      @click="$router.push('/attention')"
+    ></hm-navbar>
+    <hm-navbar
+      title="我的跟贴"
+      content="跟帖回复"
+      @click="$router.push('/comment')"
+    ></hm-navbar>
     <hm-navbar title="我的收藏" content="文章/视频"></hm-navbar>
     <hm-navbar title="设置" @click="$router.push('/edit')"></hm-navbar>
     <hm-navbar title="退出" @click="logout"></hm-navbar>

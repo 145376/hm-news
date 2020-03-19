@@ -28,6 +28,7 @@ import { Field } from 'vant';
 import { RadioGroup, Radio } from 'vant';
 import { Cell, CellGroup } from 'vant';
 import { Uploader } from 'vant';
+import { Button } from 'vant';
 Vue.use(Toast);
 Vue.use(Dialog);
 Vue.use(Field);
@@ -36,6 +37,7 @@ Vue.use(RadioGroup);
 Vue.use(Cell);
 Vue.use(CellGroup);
 Vue.use(Uploader);
+Vue.use(Button);
 
 Vue.config.productionTip = false;
 
@@ -59,8 +61,9 @@ axios.interceptors.response.use(res => {
   return res;
 });
 
-Vue.filter('date', input => {
-  return moment().format('YYYY-MM-DD');
+//全局过滤器
+Vue.filter('date', (input, format = 'YYYY-MM-DD') => {
+  return moment().format(format);
 });
 
 let vm = new Vue({

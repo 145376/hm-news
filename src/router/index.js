@@ -4,6 +4,8 @@ import Login from '../pages/Login.vue';
 import Register from '../pages/Register.vue';
 import User from '../pages/User.vue';
 import Edit from '../pages/Edit.vue';
+import Attention from '../pages/Attention.vue';
+import Comment from '../pages/Comment.vue';
 
 Vue.use(VueRouter);
 let router = new VueRouter({
@@ -12,11 +14,13 @@ let router = new VueRouter({
     { name: 'login', path: '/login', component: Login },
     { path: '/register', component: Register },
     { path: '/user', component: User },
-    { path: '/edit', component: Edit }
+    { path: '/edit', component: Edit },
+    { path: '/attention', component: Attention },
+    { path: '/comment', component: Comment }
   ]
 });
 //路由守卫
-let permit = ['/user', '/edit'];
+let permit = ['/user', '/edit', '/attention'];
 router.beforeEach((to, from, next) => {
   // console.log(to);
   // console.log(from);

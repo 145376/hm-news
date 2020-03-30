@@ -32,7 +32,12 @@
       content="跟帖回复"
       @click="$router.push('/comment')"
     ></hm-navbar>
-    <hm-navbar title="我的收藏" content="文章/视频"></hm-navbar>
+    <hm-navbar
+      title="我的收藏"
+      content="文章/视频"
+      @click="$router.push('/collect')"
+    ></hm-navbar>
+    <hm-navbar title="栏目管理" @click="$router.push('/manage')"></hm-navbar>
     <hm-navbar title="设置" @click="$router.push('/edit')"></hm-navbar>
     <hm-navbar title="退出" @click="logout"></hm-navbar>
   </div>
@@ -40,24 +45,20 @@
 
 <script>
 export default {
-  created() {
+  async created() {
     let id = localStorage.getItem('userId');
     let token = localStorage.getItem('token');
     // console.log(id, token);
-    this.$axios({
+    let res = await this.$axios({
       url: `/user/${id}`,
       method: 'get'
-      // headers: {
-      //   Authorization: token
-      // }
-    }).then(res => {
-      // console.log(res);
-      const { statusCode, message, data } = res.data;
-      if (statusCode === 200) {
-        this.info = data;
-        // console.log(this.info);
-      }
     });
+    // console.log(res);
+    const { statusCode, message, data } = res.data;
+    if (statusCode === 200) {
+      this.info = data;
+      // console.log(this.info);
+    }
   },
   data() {
     return {
@@ -65,21 +66,19 @@ export default {
     };
   },
   methods: {
-    logout() {
-      this.$dialog
-        .confirm({
+    async logout() {
+      try {
+        await this.$dialog.confirm({
           title: '温馨提示',
           message: '是否要退出'
-        })
-        .then(() => {
-          localStorage.removeItem('token');
-          localStorage.removeItem('userId');
-          this.$router.push('/login');
-          this.$toast('退出成功');
-        })
-        .catch(() => {
-          this.$toast('取消退出');
         });
+        localStorage.removeItem('token');
+        localStorage.removeItem('userId');
+        this.$router.push('/login');
+        this.$toast('退出成功');
+      } catch (err) {
+        console.log(err);
+      }
     }
   }
 };

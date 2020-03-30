@@ -24,38 +24,34 @@ export default {
     this.getInfo();
   },
   methods: {
-    getInfo() {
-      this.$axios({
+    async getInfo() {
+      let res = await this.$axios({
         url: `/user_follows`
-      }).then(res => {
-        let { statusCode, data } = res.data;
-        if (statusCode === 200) {
-          this.list = data;
-          console.log(this.list);
-        }
       });
+      let { statusCode, data } = res.data;
+      if (statusCode === 200) {
+        this.list = data;
+        console.log(this.list);
+      }
     },
-    unattention(id) {
-      this.$dialog
-        .confirm({
+    async unattention(id) {
+      try {
+        await this.$dialog.confirm({
           title: '温馨提示',
           message: '是否取关该用户'
-        })
-        .then(() => {
-          this.$axios({
-            url: `/user_unfollow/${id}`,
-            data: id
-          }).then(res => {
-            console.log(res.data);
-            let { statusCode } = res.data;
-            if (statusCode === 200) {
-              this.getInfo();
-            }
-          });
-        })
-        .catch(() => {
-          console.log('取消操作');
         });
+        let res = await this.$axios({
+          url: `/user_unfollow/${id}`,
+          data: id
+        });
+        console.log(res.data);
+        let { statusCode } = res.data;
+        if (statusCode === 200) {
+          this.getInfo();
+        }
+      } catch (err) {
+        console.log(err);
+      }
     }
   },
   data() {

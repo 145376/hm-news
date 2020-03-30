@@ -26,7 +26,7 @@
       msg="输入格式有误"
       ref="password"
     ></hm-input>
-    <hm-button @clickFn="clickFn">注册</hm-button>
+    <hm-button @clickFn="register">注册</hm-button>
   </div>
 </template>
 
@@ -40,12 +40,12 @@ export default {
     };
   },
   methods: {
-    clickFn() {
+    async register() {
       let res1 = this.$refs.username.checkout(this.username);
       let res2 = this.$refs.nickname.checkout(this.nickname);
       let res3 = this.$refs.password.checkout(this.password);
       if (!res1 || !res2 || !res3) return;
-      this.$axios({
+      let res = await this.$axios({
         url: '/register',
         method: 'post',
         data: {
@@ -53,21 +53,19 @@ export default {
           nickname: this.nickname,
           password: this.password
         }
-      }).then(res => {
-        console.log(res);
-        if (res.data.statusCode === 200) {
-          this.$toast.success(res.data.message);
-          this.$router.push({
-            name: 'login',
-            params: {
-              username: this.username,
-              password: this.password
-            }
-          });
-        } else {
-          this.$toast.fail(res.data.message);
-        }
       });
+      if (res.data.statusCode === 200) {
+        this.$toast.success(res.data.message);
+        this.$router.push({
+          name: 'login',
+          params: {
+            username: this.username,
+            password: this.password
+          }
+        });
+      } else {
+        this.$toast.fail(res.data.message);
+      }
     }
   }
 };

@@ -1,18 +1,30 @@
 <template>
   <div class="hm-comment">
     <hm-header>我的评论</hm-header>
-    <div class="list" v-for="item in list" :key="item.id">
-      <div class="time">{{ item.create_date | date('YYYY-MM-DD HH:mm') }}</div>
-      <div class="father" v-if="item.parent">
-        <div class="user">回复: {{ item.parent.user.nickname }}</div>
-        <div class="quest">{{ item.parent.content }}</div>
+    <van-list
+      v-model="loading"
+      :finished="finished"
+      finished-text="没有更多了"
+      loading-text="正在加载"
+      :immediate-check="false"
+      @load="onLoad"
+      offset="50"
+    >
+      <div class="list" v-for="item in list" :key="item.id">
+        <div class="time">
+          {{ item.create_date | date('YYYY-MM-DD HH:mm') }}
+        </div>
+        <div class="father" v-if="item.parent">
+          <div class="user">回复: {{ item.parent.user.nickname }}</div>
+          <div class="quest">{{ item.parent.content }}</div>
+        </div>
+        <div class="content">{{ item.content }}</div>
+        <div class="origin" @click="$router.push(`/post/${item.id}`)">
+          <p class="cuttext">原文：{{ item.post.title }}</p>
+          <span class="iconfont iconjiantou1"></span>
+        </div>
       </div>
-      <div class="content">{{ item.content }}</div>
-      <div class="origin" @click="$router.push(`/post/${item.id}`)">
-        <p class="cuttext">原文：{{ item.post.title }}</p>
-        <span class="iconfont iconjiantou1"></span>
-      </div>
-    </div>
+    </van-list>
   </div>
 </template>
 
@@ -22,21 +34,37 @@ export default {
     this.getInfo();
   },
   methods: {
-    getInfo() {
-      this.$axios({
-        url: `/user_comments`
-      }).then(res => {
-        let { statusCode, data } = res.data;
-        if (statusCode === 200) {
-          this.list = data;
-          console.log(this.list);
+    async getInfo() {
+      let res = await this.$axios({
+        url: `/user_comments`,
+        params: {
+          pageIndex: this.pageIndex,
+          pageSize: this.pageSize
         }
       });
+      let { statusCode, data } = res.data;
+      if (statusCode === 200) {
+        this.list = [...this.list, ...data];
+        if (data.length < this.pageSize) {
+          this.finished = true;
+        }
+      }
+    },
+    onLoad() {
+      setTimeout(() => {
+        this.pageIndex++;
+        this.getInfo();
+        this.loading = false;
+      }, 2000);
     }
   },
   data() {
     return {
-      list: []
+      list: [],
+      pageIndex: 1,
+      pageSize: 10,
+      loading: false,
+      finished: false
     };
   }
 };

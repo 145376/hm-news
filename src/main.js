@@ -8,7 +8,9 @@ import './style/base.less';
 //引入字体图标
 import './style/iconfont.less';
 //引入路由
-import router from './router/index';
+import router from './router';
+//引入store
+import store from './store';
 //引入全局组件
 import HmHeader from './components/HmHeader.vue';
 import HmLogo from './components/HmLogo.vue';
@@ -94,5 +96,6 @@ Vue.filter('date2', input => {
 
 let vm = new Vue({
   router,
+  store,
   render: h => h(App)
 }).$mount('#app');

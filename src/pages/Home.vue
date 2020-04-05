@@ -129,6 +129,18 @@ export default {
         this.getPost(this.tabList[value].id);
       }, 1000);
     }
+  },
+  destroyed() {
+    console.log('组件销毁了');
+  },
+  beforeRouteLeave(to, from, next) {
+    console.log('离开了');
+    console.log(to);
+    if (to.path !== 'detail') {
+      console.log(1);
+      this.$store.commit('uncache', 'home');
+    }
+    next();
   }
 };
 </script>

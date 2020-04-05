@@ -12,6 +12,7 @@ import Detail from '../pages/Detail.vue';
 import Manage from '../pages/Manage.vue';
 import Search from '../pages/Search.vue';
 import aaa from '../pages/aaa.vue';
+import store from '../store';
 
 Vue.use(VueRouter);
 
@@ -33,9 +34,9 @@ let router = new VueRouter({
     { path: '/attention', component: Attention },
     { path: '/comment', component: Comment },
     { path: '/collect', component: Collect },
-    { path: '/home', component: Home },
+    { path: '/home', component: Home, name: 'home' },
     { path: '/aaa', component: aaa },
-    { path: '/detail/:id', component: Detail },
+    { path: '/detail/:id', component: Detail, name: 'detail' },
     { path: '/manage', component: Manage },
     { path: '/search', component: Search }
   ]
@@ -43,6 +44,9 @@ let router = new VueRouter({
 //路由守卫
 let permit = ['/user', '/edit', '/attention', '/collect'];
 router.beforeEach((to, from, next) => {
+  if (to.name === 'home') {
+    store.commit('cache', 'home');
+  }
   let token = localStorage.getItem('token');
   if (permit.includes(to.path)) {
     if (token) {
